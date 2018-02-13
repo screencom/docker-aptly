@@ -8,8 +8,8 @@ LABEL Maintainer="Ernesto Pérez <eperez@isotrol.com>" \
 RUN set -x \
     && sed -i -- 's/main/main contrib non-free/g' /etc/apt/sources.list \
     && apt-get update && apt-get install -y \
-    gnu \
-    ca-certificate \
+    gnupg \
+    ca-certificates \
     graphviz \
     && echo "deb http://repo.aptly.info/ squeeze main" \
      > /etc/apt/sources.list.d/aptly.list \
