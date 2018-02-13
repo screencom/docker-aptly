@@ -21,4 +21,4 @@ COPY rootfs/etc/aptly.conf /etc/
 EXPOSE 8080
 VOLUME ["/aptly"]
 
-CMD ["aptly", "serve" ,"-no-lock"]
+CMD ["aptly","api","serve","-no-lock"]
