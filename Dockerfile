@@ -18,7 +18,13 @@ RUN set -x \
     aptly
 
 COPY rootfs/etc/aptly.conf /etc/
+
+COPY rootfs/docker-entrypoint.sh /usr/local/bin/
+RUN ln -s usr/local/bin/docker-entrypoint.sh /
+
 EXPOSE 8080
 VOLUME ["/srv/aptly"]
+
+ENTRYPOINT ["docker-entrypoint.sh"]
 
 CMD ["aptly","api","serve","-no-lock"]
