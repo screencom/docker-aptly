@@ -3,7 +3,7 @@ FROM debian:9-slim
 LABEL Maintainer="Ernesto Pérez <eperez@isotrol.com>" \
       Name="Forticlient_cli" \
       Description="Imágen con el servicio aptly api" \
-      Version="0.1.0"
+      Version="0.2.0"
 
 RUN set -x \
     && sed -i -- 's/main/main contrib non-free/g' /etc/apt/sources.list \
@@ -19,6 +19,6 @@ RUN set -x \
 
 COPY rootfs/etc/aptly.conf /etc/
 EXPOSE 8080
-VOLUME ["/aptly"]
+VOLUME ["/srv/aptly"]
 
 CMD ["aptly","api","serve","-no-lock"]
