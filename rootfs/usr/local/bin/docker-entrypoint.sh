@@ -32,7 +32,7 @@ EOF
   if [ ! -f "/etc/mkgpg.conf" ]; then
     echo "======= CREATE BASH CONF GPG ======"
     tee /etc/mkgpg.conf << EOF
-    %echo Generating a default key
+    %echo >>>>> Generating a default key <<<<<<<
     Key-Type: default
     Key-Length: 2048
     Subkey-Type: default
@@ -43,10 +43,8 @@ EOF
     Expire-Date: 0
     Passphrase: Xb(9DUfr6m/eZe?YVFe{
     #%no-protection
-    %pubring aptly.pub
-    %secring aptly.sec
     %commit
-    %echo done
+    %echo >>>>>> Done GPG key <<<<<<<<<
 EOF
   fi
 }
