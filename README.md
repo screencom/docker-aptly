@@ -1,8 +1,15 @@
 ![logo](https://global.download.synology.com/download/Package/img/Docker/1.11.2-0270/thumb_256.png?style=centerme)
+![aptly](https://adfinis-sygroup.ch/_Resources/Persistent/e5ec5e020fdc48769ae572b51e1eefdf7ea89c51/aptly.png)
 
 # Project Dockers containers.
-Docker image with service aptly, run api mode.
+Docker image with service aptly.
+
+    - [x] Service APTLY run in mode API(Listen port 8080).
+    - [x] Add support GPG Key.
+    - [x] Auto generate gpg keys for sign repository.
 
 Default port API: 8080
 
 # Skell Repository.
+
+[![Anchore Image Overview](https://anchore.io/service/badges/image/d97e20c07448d9394644e18ffbf3187df13b881be280e2b645acada865f63b52)](https://anchore.io/image/dockerhub/d97e20c07448d9394644e18ffbf3187df13b881be280e2b645acada865f63b52?repo=ieperez%2Fdocker-aptly&tag=latest)
