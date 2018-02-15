@@ -33,11 +33,15 @@ EOF
     tee /etc/mkgpg.conf << EOF
     %echo Generating a default key
     Key-Type: default
+    Key-Length: 2048
     Subkey-Type: default
+    Subkey-Length: 2048
     Name-Real: Ernesto Pérez
-    Name-Comment: Xb(9DUfr6m/eZe?YVFe{
+    Name-Comment: Key Repository Packages deb
     Name-Email: eperez@isotrol.com
     Expire-Date: 0
+    Passphrase: Xb(9DUfr6m/eZe?YVFe{
+    #%no-protection
     %pubring aptly.pub
     %secring aptly.sec
     %commit
@@ -74,9 +78,9 @@ function checkweb() {
   if [ $WEBUI = "yes" ]; then
     URL=https://github.com/sdumetz/aptly-web-ui/releases
     VERSION=$(curl -L -s -H 'Accept: application/json' $URL/latest|sed -e 's/.*"tag_name":"\([^"]*\)".*/\1/')
-    if [ ! -d "$DIRPATH/ui" ]; then
+    if [ ! -d "$PUBPATH/ui" ]; then
       echo "======= DEPLOY WEB INTERFACE ======="
-      curl -SL $URL/download/$VERSION/aptly-web-ui.tar.gz |tar xzv -C $DIRPATH
+      curl -SL $URL/download/$VERSION/aptly-web-ui.tar.gz |tar xzv -C $PUBPATH
       echo "=========== FINISH DEPLOY =========="
     else
       echo "========== !!CANCEL DEPLOY ============"
