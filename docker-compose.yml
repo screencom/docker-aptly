@@ -38,7 +38,7 @@ services:
       retries: 3
 
     ftp:
-      image:
+      image: stilliard/pure-ftpd
       environment:
         - PUBLICHOST=localhost
         - ADDED_FLAGS=--tls=2
