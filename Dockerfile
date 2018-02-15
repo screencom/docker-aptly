@@ -11,15 +11,15 @@ RUN set -x \
     gnupg \
     ca-certificates \
     graphviz \
+    curl \
     && echo "deb http://repo.aptly.info/ squeeze main" \
      > /etc/apt/sources.list.d/aptly.list \
     && apt-key adv --keyserver keys.gnupg.net --recv-keys 9C7DE460 \
     && apt-get update && apt-get install -y \
     aptly
 
-COPY rootfs/etc/aptly.conf /etc/
+COPY rootfs/ /
 
-COPY rootfs/docker-entrypoint.sh /usr/local/bin/
 RUN ln -s usr/local/bin/docker-entrypoint.sh /
 
 EXPOSE 8080
