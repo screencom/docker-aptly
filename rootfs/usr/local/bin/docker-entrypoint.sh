@@ -94,6 +94,6 @@ checkgpg
 gengpg
 checkweb
 
-. "/etc/importkey.conf"
+. "/etc/importkeys.conf"
 
 exec "$@"
