@@ -11,6 +11,7 @@ function checkdir() {
   if [ ! -d "$GPGPATH" ]; then
     echo "====== CREATE GNUGPG DIR ======="
     mkdir -p $GPGPATH
+    chmod -R 600 $GPGPATH
   fi
   if [ ! -d "$PUBPATH" ]; then
     echo "====== CREATE PUBLIC DIR ======="
@@ -31,21 +32,19 @@ EOF
   if [ ! -f "/etc/mkgpg.conf" ]; then
     echo "======= CREATE BASH CONF GPG ======"
     tee /etc/mkgpg.conf << EOF
-    %echo Generating a default key
+    %echo >>>>> Generating a default key <<<<<<<
     Key-Type: default
     Key-Length: 2048
     Subkey-Type: default
     Subkey-Length: 2048
-    Name-Real: Ernesto Pérez
+    Name-Real: Ernesto Perez
     Name-Comment: Key Repository Packages deb
     Name-Email: eperez@isotrol.com
     Expire-Date: 0
     Passphrase: Xb(9DUfr6m/eZe?YVFe{
     #%no-protection
-    %pubring aptly.pub
-    %secring aptly.sec
     %commit
-    %echo done
+    %echo >>>>>> Done GPG key <<<<<<<<<
 EOF
   fi
 }
@@ -94,6 +93,6 @@ checkgpg
 gengpg
 checkweb
 
-. "/etc/importkey.conf"
+. "/etc/importkeys.conf"
 
 exec "$@"
