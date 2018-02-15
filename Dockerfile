@@ -1,7 +1,7 @@
 FROM debian:9-slim
 
 LABEL Maintainer="Ernesto Pérez <eperez@isotrol.com>" \
-      Name="Forticlient_cli" \
+      Name="Docker Aptly" \
       Description="Imágen con el servicio aptly api" \
       Version="0.2.0"
 
