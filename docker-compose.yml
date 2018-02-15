@@ -38,12 +38,9 @@ services:
       retries: 3
 
   ftp:
-    image: stilliard/pure-ftpd
-    environment:
-      - PUBLICHOST=localhost
-    #  - ADDED_FLAGS=--tls=2
+    image: gimoh/pureftpd
     volumes:
-      - ./aptly/public:/home/ftpusers
+      - ./aptly/public:/var/lib/ftp
     ports:
       - "21:21"
       - "20:20"
