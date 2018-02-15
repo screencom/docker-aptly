@@ -14,7 +14,9 @@ RUN set -x \
     ca-certificates \
     graphviz \
     curl \
-    dirmngr \
+    dirmngr
+
+RUN set -x \
     && echo "deb http://repo.aptly.info/ squeeze main" \
      > /etc/apt/sources.list.d/aptly.list \
     && apt-key adv --keyserver keys.gnupg.net --recv-keys 9C7DE460 \
