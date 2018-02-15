@@ -11,6 +11,7 @@ function checkdir() {
   if [ ! -d "$GPGPATH" ]; then
     echo "====== CREATE GNUGPG DIR ======="
     mkdir -p $GPGPATH
+    chmod -R 600 $GPGPATH
   fi
   if [ ! -d "$PUBPATH" ]; then
     echo "====== CREATE PUBLIC DIR ======="
