@@ -69,7 +69,7 @@ function gengpg() {
   fi
   if [ ! -f "$PUBPATH/gpg.pub.key" ]; then
     echo "======= EXPORT GPG PUB KEY ========"
-    IDKEY=$(gpg --list-keys --with-colons | awk -F: '/^pub:/ { print $5 }')
+    IDKEY=$(gpg --list-keys --with-colons | awk -F":" '/^pub:/ { print $5 }')
     gpg --armor --output $PUBPATH/gpg.pub.key --export $IDKEY
     gpg --keyserver $KEYSERVER --send-keys $IDKEY
     echo "======== FINISH EXPORT KEY ========"
