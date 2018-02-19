@@ -90,7 +90,7 @@ function gengpg() {
 }
 
 function checkweb() {
-  if [ $WEBUI = "yes" ]; then
+  if [ "${WEBUI}" = "yes" ]; then
     URL=https://github.com/sdumetz/aptly-web-ui/releases
     VERSION=$(curl -L -s -H 'Accept: application/json' $URL/latest|sed -e 's/.*"tag_name":"\([^"]*\)".*/\1/')
     if [ ! -d "$PUBPATH/ui" ]; then
