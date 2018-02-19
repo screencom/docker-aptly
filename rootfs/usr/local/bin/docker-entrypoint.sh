@@ -41,8 +41,9 @@ EOF
     Name-Comment: Key Repository Packages deb
     Name-Email: eperez@isotrol.com
     Expire-Date: 0
-    Passphrase: Xb(9DUfr6m/eZe?YVFe{
-    #%no-protection
+    #Passphrase: Xb(9DUfr6m/eZe?YVFe{
+    %no-ask-passphrase
+    %no-protection
     %commit
     %echo >>>>>> Done GPG key <<<<<<<<<
 EOF
@@ -55,11 +56,18 @@ function importkey() {
 }
 
 function gengpg() {
-  if [ ! -f "$PUBPATH/gpg.pub.key" ]; then
-    echo "======= GENERATE GPG KEY ========"
+  if [ ! -f "$APTLYPATH/gpg.priv.key" ]; then
+    echo "======= GENERATE GPG PRIVATE KEY ========"
     gpg --batch --gen-key /etc/mkgpg.conf
-    echo "======= FINISH GENERATE KEY ======="
+    echo "======= FINISH GENERATE PRIVATE KEY ======="
     gpg --list-secret-keys
+  else
+    echo "======= IMPORT PRIVATE KEY DETECTED ======="
+    gpg --import $APTLYPATH/gpg.priv.key
+    gpg --list-secret-keys
+    echo "======= FINISH IMPORT PRIVATE KEY ========"
+  fi
+  if [ ! -f "$PUBPATH/gpg.pub.key" ]; then
     echo "======= EXPORT GPG PUB KEY ========"
     IDKEY=$(gpg --list-keys --with-colons | awk -F: '/^pub:/ { print $5 }')
     gpg --armor --output $PUBPATH/gpg.pub.key --export $IDKEY
