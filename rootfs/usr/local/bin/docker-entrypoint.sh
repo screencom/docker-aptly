@@ -19,6 +19,14 @@ function checkdir() {
   fi
 }
 
+function checkconf() {
+  if [ -f "$APTLYPATH/aptly.conf" ]; then
+    echo "====== DETECTED APTLY CONFIG FILE ======="
+     cp -av $APTLYPATH/aptly.conf /etc/aptly.conf
+    echo "====== APTLY CONFIG FILE APPLIED ======"
+  fi
+}
+
 function checkgpg() {
   if [ ! -f "$GPGPATH/gpg.conf" ]; then
     echo "====== GENERATE GPG CONF FILE ======="
@@ -97,6 +105,7 @@ function checkweb() {
 }
 
 checkdir
+checkconf
 checkgpg
 gengpg
 checkweb
