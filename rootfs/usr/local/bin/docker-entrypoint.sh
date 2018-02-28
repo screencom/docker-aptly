@@ -2,10 +2,17 @@
 set -eo pipefail
 shopt -s nullglob
 
-GPGPATH=~/.gnupg
-KEYSERVER=pgp.mit.edu
-APTLYPATH=/srv/aptly
-PUBPATH=$APTLYPATH/public
+GPGPATH="$HOME/.gnupg"
+KEYSERVER="pgp.mit.edu"
+APTLYPATH="/srv/aptly"
+PUBPATH="${APTLYPATH}/public"
+GPGTYPE="${GPGTYPE:-default}"
+GPGNAME="${GPGNAME:-Aptly Repository}"
+GPGMAIL="${GPGMAIL:-aptly@mail.com}"
+GPGCIPHER="${GPGCIPHER:-SHA256}"
+GPGLENGHT="${GPGLENGHT:-2048}"
+GPGCOMMENT="${GPGCOMMENT:-Key Repository Packages deb}"
+GPGEXPIRE="${GPGEXPIRE:-0}"
 
 function checkdir() {
   if [ ! -d "$GPGPATH" ]; then
@@ -28,11 +35,11 @@ function checkconf() {
 }
 
 function checkgpg() {
-  if [ ! -f "$GPGPATH/gpg.conf" ]; then
+  if [ ! -f "${GPGPATH}/gpg.conf" ]; then
     echo "====== GENERATE GPG CONF FILE ======="
-    tee $GPGPATH/gpg.conf << EOF
-    personal-digest-preferences SHA256
-    cert-digest-algo SHA256
+    tee ${GPGPATH}/gpg.conf << EOF
+    personal-digest-preferences ${GPGCIPHER}
+    cert-digest-algo ${GPGCIPHER}
     default-preference-list SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAST5 ZLIB BZIP2 ZIP Uncompressed
     personal-cipher-preferences TWOFISH CAMELLIA256 AES 3DES
 EOF
@@ -41,15 +48,14 @@ EOF
     echo "======= CREATE BASH CONF GPG ======"
     tee /etc/mkgpg.conf << EOF
     %echo >>>>> Generating a default key <<<<<<<
-    Key-Type: default
-    Key-Length: 2048
-    Subkey-Type: default
-    Subkey-Length: 2048
-    Name-Real: Ernesto Perez
-    Name-Comment: Key Repository Packages deb
-    Name-Email: eperez@isotrol.com
-    Expire-Date: 0
-    #Passphrase: Xb(9DUfr6m/eZe?YVFe{
+    Key-Type: ${GPGTYPE}
+    Key-Length: ${GPGLENGHT}
+    Subkey-Type: ${GPGTYPE}
+    Subkey-Length: ${GPGLENGHT}
+    Name-Real: ${GPGNAME}
+    Name-Comment: ${GPGCOMMENT}
+    Name-Email: ${GPGMAIL}
+    Expire-Date: ${GPGEXPIRE}
     %no-ask-passphrase
     %no-protection
     %commit
@@ -59,43 +65,43 @@ EOF
 }
 
 function importkey() {
-  gpg --keyserver $SERVERGPG --recv-keys $1 \
+  gpg --keyserver ${SERVERGPG} --recv-keys $1 \
   && gpg --export --armor $1 | apt-key add -
 }
 
 function gengpg() {
-  if [ ! -f "$APTLYPATH/gpg.priv.key" ]; then
+  if [ ! -f "${APTLYPATH}/gpg.priv.key" ]; then
     echo "======= GENERATE GPG PRIVATE KEY ========"
     gpg --batch --gen-key /etc/mkgpg.conf
     echo "======= FINISH GENERATE PRIVATE KEY ======="
     gpg --list-secret-keys
   else
     echo "======= IMPORT PRIVATE KEY DETECTED ======="
-    gpg --import $APTLYPATH/gpg.priv.key
+    gpg --import ${APTLYPATH}/gpg.priv.key
     gpg --list-secret-keys
     echo "======= FINISH IMPORT PRIVATE KEY ========"
   fi
-  if [ ! -f "$PUBPATH/gpg.pub.key" ]; then
+  if [ ! -f "${PUBPATH}/gpg.pub.key" ]; then
     echo "======= EXPORT GPG PUB KEY ========"
     IDKEY=$(gpg --list-keys --with-colons | awk -F":" '/^pub:/ { print $5 }')
-    gpg --armor --output $PUBPATH/gpg.pub.key --export $IDKEY
-    gpg --keyserver $KEYSERVER --send-keys $IDKEY
+    gpg --armor --output ${PUBPATH}/gpg.pub.key --export $IDKEY
+    gpg --keyserver ${KEYSERVER} --send-keys $IDKEY
     echo "======== FINISH EXPORT KEY ========"
   else
     echo "======= IMPORT PUB KEY DETECTED ======="
-    gpg --import $PUBPATH/gpg.pub.key
+  fi
+    gpg --import ${PUBPATH}/gpg.pub.key
     gpg --list-secret-keys
     echo "======= FINISH IMPORT PUB KEY ========"
-  fi
 }
 
 function checkweb() {
   if [ "${WEBUI}" = "yes" ]; then
     URL=https://github.com/sdumetz/aptly-web-ui/releases
-    VERSION=$(curl -L -s -H 'Accept: application/json' $URL/latest|sed -e 's/.*"tag_name":"\([^"]*\)".*/\1/')
-    if [ ! -d "$PUBPATH/ui" ]; then
+    VERSION=$(curl -L -s -H 'Accept: application/json' ${URL}/latest|sed -e 's/.*"tag_name":"\([^"]*\)".*/\1/')
+    if [ ! -d "${PUBPATH}/ui" ]; then
       echo "======= DEPLOY WEB INTERFACE ======="
-      curl -SL $URL/download/$VERSION/aptly-web-ui.tar.gz |tar xzv -C $PUBPATH
+      curl -SL ${URL}/download/${VERSION}/aptly-web-ui.tar.gz |tar xzv -C ${PUBPATH}
       echo "=========== FINISH DEPLOY =========="
     else
       echo "========== !!CANCEL DEPLOY ============"
