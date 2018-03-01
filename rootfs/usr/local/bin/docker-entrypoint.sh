@@ -65,8 +65,10 @@ EOF
 }
 
 function importkey() {
+  echo "====== IMPORT KEYS PUBLIC ======"
   gpg --keyserver ${SERVERGPG} --recv-keys $1 \
   && gpg --export --armor $1 | apt-key add -
+  echp "====== FINISH IMPORT PUBLIC KEYS ======"
 }
 
 function gengpg() {
