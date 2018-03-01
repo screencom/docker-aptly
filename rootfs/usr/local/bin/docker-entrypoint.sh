@@ -13,6 +13,7 @@ GPGCIPHER="${GPGCIPHER:-SHA256}"
 GPGLENGHT="${GPGLENGHT:-2048}"
 GPGCOMMENT="${GPGCOMMENT:-Key Repository Packages deb}"
 GPGEXPIRE="${GPGEXPIRE:-0}"
+GPGSERVER="${GPGSERVER}-keys.gnupg.net"
 
 function checkdir() {
   if [ ! -d "$GPGPATH" ]; then
@@ -68,6 +69,7 @@ function importkey() {
   echo "====== IMPORT KEYS PUBLIC ======"
   gpg --keyserver ${SERVERGPG} --recv-keys $1 \
   && gpg --export --armor $1 | apt-key add -
+  gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver ${GPGSERVER} --recv-keys $1
   echp "====== FINISH IMPORT PUBLIC KEYS ======"
 }
 
