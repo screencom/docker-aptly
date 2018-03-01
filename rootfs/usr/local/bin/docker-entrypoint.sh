@@ -13,7 +13,7 @@ GPGCIPHER="${GPGCIPHER:-SHA256}"
 GPGLENGHT="${GPGLENGHT:-2048}"
 GPGCOMMENT="${GPGCOMMENT:-Key Repository Packages deb}"
 GPGEXPIRE="${GPGEXPIRE:-0}"
-GPGSERVER="${GPGSERVER}-keys.gnupg.net"
+GPGSERVER="${GPGSERVER-keys.gnupg.net}"
 
 function checkdir() {
   if [ ! -d "$GPGPATH" ]; then
