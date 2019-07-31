@@ -8,8 +8,8 @@ LABEL Maintainer="Ernesto Pérez <eperez@isotrol.com>" \
 RUN set -x \
     && sed -i -- 's/main/main contrib non-free/g' /etc/apt/sources.list \
     && apt-get update \
-    && apt-get upgrade -y \
-    && apt-get install --no-install-recommends -y \
+    && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y \
+    && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
     gnupg \
     ca-certificates \
     graphviz \
@@ -19,9 +19,9 @@ RUN set -x \
 RUN set -x \
     && echo "deb http://repo.aptly.info/ squeeze main" \
      > /etc/apt/sources.list.d/aptly.list \
-    && apt-key adv --keyserver keys.gnupg.net --recv-keys 9C7DE460 \
+    && apt-key adv --recv-keys ED75B5A4483DA07C \
     && apt-get update \
-    && apt-get install --no-install-recommends -y \
+    && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
     aptly \
     && rm -rf /var/lib/apt/lists/*
 
